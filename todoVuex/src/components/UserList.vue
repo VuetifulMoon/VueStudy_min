@@ -1,7 +1,7 @@
 <template>
     <div>
         User List
-        <div v-for="user in people" :key=user.id>
+        <div v-for="user in users" :key=user.id>
             {{ user.name }}
         </div>
     </div>
@@ -14,7 +14,9 @@ import { mapState, mapActions } from 'vuex';
             this.getUsers();
         },
         computed: {
-            ...mapState({people: 'users'})
+            ...mapState('user', {
+                users: state => state.users
+            })
             // users() {
             //     return this.$store.state.users;
             // },
@@ -23,7 +25,7 @@ import { mapState, mapActions } from 'vuex';
             // }
         },
         methods: {
-            ...mapActions(['getUsers'])
+            ...mapActions('user', ['getUsers'])
             // getUsers() {
             //     this.$store.dispatch('getUsers');
             // }

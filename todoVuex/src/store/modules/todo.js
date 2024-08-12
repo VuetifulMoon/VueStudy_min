@@ -5,7 +5,8 @@ export default {
             { id: 1, text: 'buy a car', checked: false},
             { id: 2, text: 'play game', checked: false},
         ], 
-        editingTodoId: null
+        editingTodoId: null,
+        searchQuery: ''
     },
     mutations: {
         SET_EDITING_TODO(state, todoId) {
@@ -36,6 +37,10 @@ export default {
                 return todo.id === todoId;
             });
             state.todos.splice(index, 1);
+        },
+        SET_SEARCH_QUERY(state, query) {
+            console.log('SET_SEARCH_QUERY: ', query);
+            state.searchQuery = query;
         }
     },
     actions: {
@@ -61,6 +66,9 @@ export default {
             setTimeout(function () {
                 commit('DELETE_TODO', todoId);
             }, 500);
+        },
+        setSearchQuery( { commit }, query) {
+            commit('SET_SEARCH_QUERY', query);
         }
     },
     getters: {
@@ -68,5 +76,9 @@ export default {
             return state.todos.filter(todo => todo.checked).length;
         },
         editingTodoId: state => state.editingTodoId,
+        filteredTodos: state => {
+            const query = state.searchQuery.toLowerCase();
+            return state.todos.filter(todo => todo.text.toLowerCase().includes(query));
+        }
     }
 }

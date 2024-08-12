@@ -5,8 +5,19 @@ export default {
             { id: 1, text: 'buy a car', checked: false},
             { id: 2, text: 'play game', checked: false},
         ], 
+        editingTodoId: null
     },
     mutations: {
+        SET_EDITING_TODO(state, todoId) {
+            state.editingTodoId = todoId;
+        },
+        UPDATE_TODO(state, { id, text}) {
+            const index = state.todos.findIndex(todo => todo.id === id);
+            if(index !== -1) {
+                state.todos[index].text = text;
+            }
+            state.editingTodoId = null;
+        },
         ADD_TODO(state, value) {
             state.todos.push({
                 id: Math.random(),
@@ -28,6 +39,14 @@ export default {
         }
     },
     actions: {
+        setEditingTodo({ commit }, todoId) {
+            commit('SET_EDITING_TODO', todoId);
+        },
+        updateTodo({ commit }, payload) {
+            setTimeout(() => {
+                commit('UPDATE_TODO', payload);
+            }, 500);
+        },
         addTodo({ commit }, value) {
             setTimeout(function() {
                 commit('ADD_TODO', value);
@@ -47,6 +66,7 @@ export default {
     getters: {
         numberOfCompletedTodo: state => {
             return state.todos.filter(todo => todo.checked).length;
-        }
+        },
+        editingTodoId: state => state.editingTodoId,
     }
 }

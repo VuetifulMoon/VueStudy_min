@@ -39,7 +39,6 @@ export default {
             state.todos.splice(index, 1);
         },
         SET_SEARCH_QUERY(state, query) {
-            console.log('SET_SEARCH_QUERY: ', query);
             state.searchQuery = query;
         }
     },

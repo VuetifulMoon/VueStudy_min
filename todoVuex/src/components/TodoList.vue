@@ -11,8 +11,6 @@
             v-for="todo in filteredTodos" 
             :key="todo.id"
             :todo="todo"
-            @toggle-checkbox="toggleCheckbox"
-            @click-delete="deleteTodo"
         />
     </div>
 </template>
@@ -27,8 +25,8 @@ export default {
     },
     data() {
         return {
+            // searchQuery 가져오기
             localSearchQuery: this.$store.state.todo.searchQuery,
-            todos: this.$store.state.todo.todos
         }
     },  
     computed: {
@@ -36,12 +34,7 @@ export default {
     },
     methods: {
         ...mapActions('todo', ['setSearchQuery']),
-        toggleCheckbox(value) {
-            this.$emit('toggle-checkbox', value);
-        },
-        deleteTodo(todoId) {
-            this.$emit('click-delete', todoId);
-        },
+        // 검색어를 $store.state.todo.searchQuery에 반영
         updateSearchQuery(e) {
             this.setSearchQuery(e.target.value);
         }

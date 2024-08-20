@@ -4,7 +4,6 @@
             <input
                 v-model="editedText"
                 @keyup.enter="updateTodo"
-                @blur="cancelEdit"    
             >
             <button @click="updateTodo" class="btn btn-primary btn-sm">Save</button>
             <button @click="cancelEdit" class="btn btn-secondary btn-sm">Cancel</button>
@@ -30,7 +29,6 @@
                 class="btn btn-danger btn-sm"
                 @click="clickDelete"
             >Delete</button>
-            {{ numberOfCompletedTodo }}
         </div>
     </div>
 </template>
@@ -51,57 +49,43 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('todo', ['numberOfCompletedTodo', 'editingTodoId']),
+        // 수정할 때 editingTodoId 가져오기
+        ...mapGetters('todo', ['editingTodoId']),
+        // 수정할 때 todo.id와 editingTodoId가 같으면 true
         isEditing() {
             return this.editingTodoId === this.todo.id;
         }
-        // numberOfCompletedTodo() {
-        //     return this.$store.getters['todo/numberOfCompletedTodo'];
-        // }
     },
     methods: {
         ...mapActions('todo', ['toggleTodo', 'deleteTodo', 'setEditingTodo', 'updateTodo']),
+        // 완료 체크
         toggleCheckbox(e) {
             this.toggleTodo({
                 id: this.todo.id,
                 checked: e.target.checked
             });
         },
+        // 삭제
         clickDelete() {
             this.deleteTodo(this.todo.id);
         },
+        // 수정 모드 시작
         startEdit() {
             this.editedText = this.todo.text;
             this.setEditingTodo(this.todo.id);
         },
+        // 수정된 값 저장
         updateTodo() {
+            console.log('updateTodo');
             this.$store.dispatch('todo/updateTodo', {
                 id: this.todo.id,
                 text: this.editedText
             });
         },
+        // 수정 취소
         cancelEdit() {
             this.setEditingTodo(null);
         }
-        // toggleCheckbox(e) {
-        //     this.$store.dispatch('todo/toggleTodo', {
-        //         id: this.todo.id,
-        //         checked: e.target.checked
-        //     });
-            // this.$store.commit('TOGGLE_TODO', {
-            //     id: this.todo.id,
-            //     checked: e.target.checked
-            // })
-            // this.$emit('toggle-checkbox', {
-            //     id: this.todo.id,
-            //     checked: e.target.checked
-            // })
-        // },
-        // clickDelete() {
-        //     this.$store.dispatch('todo/deleteTodo', this.todo.id);
-        //     // this.$store.commit('DELETE_TODO', this.todo.id);
-        //     // this.$emit('click-delete', this.todo.id)
-        // }
     }
 }
 </script>

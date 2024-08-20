@@ -9,35 +9,41 @@ export default {
         searchQuery: ''
     },
     mutations: {
+        // 수정 모드 설정
         SET_EDITING_TODO(state, todoId) {
             state.editingTodoId = todoId;
         },
-        UPDATE_TODO(state, { id, text}) {
+        // 수정된 할 일 저장
+        UPDATE_TODO(state, { id, text }) {
             const index = state.todos.findIndex(todo => todo.id === id);
             if(index !== -1) {
                 state.todos[index].text = text;
             }
             state.editingTodoId = null;
         },
+        // 할 일 추가
         ADD_TODO(state, value) {
             state.todos.push({
                 id: Math.random(),
-                text: value,
+                text: value.trim(),
                 checked: false,
             });
         },
-        TOGGLE_TODO(state, {id, checked}) {
+        // 완료 체크
+        TOGGLE_TODO(state, { id, checked }) {
             const index = state.todos.findIndex(todo => {
                 return todo.id === id;
             })
             state.todos[index].checked = checked;
         },
+        // 삭제
         DELETE_TODO(state, todoId) {
             const index = state.todos.findIndex(todo => {
                 return todo.id === todoId;
             });
             state.todos.splice(index, 1);
         },
+        // 검색어 설정
         SET_SEARCH_QUERY(state, query) {
             state.searchQuery = query;
         }
@@ -47,34 +53,29 @@ export default {
             commit('SET_EDITING_TODO', todoId);
         },
         updateTodo({ commit }, payload) {
-            setTimeout(() => {
-                commit('UPDATE_TODO', payload);
-            }, 500);
+            commit('UPDATE_TODO', payload);
         },
         addTodo({ commit }, value) {
-            setTimeout(function() {
-                commit('ADD_TODO', value);
-            }, 500);
+            commit('ADD_TODO', value);
         },
         toggleTodo({ commit }, payload) {
-            setTimeout(function () {
-                commit('TOGGLE_TODO', payload);
-            }, 500);
+            commit('TOGGLE_TODO', payload);
         },
         deleteTodo({ commit }, todoId) {
-            setTimeout(function () {
-                commit('DELETE_TODO', todoId);
-            }, 500);
+            commit('DELETE_TODO', todoId);
         },
         setSearchQuery( { commit }, query) {
             commit('SET_SEARCH_QUERY', query);
         }
     },
     getters: {
+        // 완료된 할 일 수
         numberOfCompletedTodo: state => {
             return state.todos.filter(todo => todo.checked).length;
         },
+        // 수정할 때 editingTodoId 전송
         editingTodoId: state => state.editingTodoId,
+        // 검색한 할 일
         filteredTodos: state => {
             const query = state.searchQuery.toLowerCase();
             return state.todos.filter(todo => todo.text.toLowerCase().includes(query));

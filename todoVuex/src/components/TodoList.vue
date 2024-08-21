@@ -8,20 +8,23 @@
             @input="updateSearchQuery"
         />
         <TodoApp 
-            v-for="todo in filteredTodos" 
+            v-for="todo in filteredTodos"
             :key="todo.id"
             :todo="todo"
         />
+        <FilterButtons />
     </div>
 </template>
 
 <script>
 import TodoApp from '@/components/TodoApp.vue';
 import { mapActions, mapGetters } from 'vuex';
+import FilterButtons from './FilterButtons.vue';
 
 export default {
     components: {
-        TodoApp
+        TodoApp,
+        FilterButtons,
     },
     data() {
         return {

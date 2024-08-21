@@ -6,9 +6,14 @@ export default {
             { id: 2, text: 'play game', checked: false},
         ], 
         editingTodoId: null,
-        searchQuery: ''
+        searchQuery: '',
+        filter: 'all',
     },
     mutations: {
+        // 필터 상태 설정
+        SET_FILTER(state, filter) {
+            state.filter = filter;
+        },
         // 수정 모드 설정
         SET_EDITING_TODO(state, todoId) {
             state.editingTodoId = todoId;
@@ -49,6 +54,9 @@ export default {
         }
     },
     actions: {
+        setFilter({ commit }, filter) {
+            commit('SET_FILTER', filter);
+        },
         setEditingTodo({ commit }, todoId) {
             commit('SET_EDITING_TODO', todoId);
         },
@@ -75,10 +83,19 @@ export default {
         },
         // 수정할 때 editingTodoId 전송
         editingTodoId: state => state.editingTodoId,
-        // 검색한 할 일
+        // 검색한 할 일 및 완료미완료여부
         filteredTodos: state => {
             const query = state.searchQuery.toLowerCase();
-            return state.todos.filter(todo => todo.text.toLowerCase().includes(query));
-        }
+            return state.todos
+                .filter(todo => todo.text.toLowerCase().includes(query))
+                .filter(todo => {
+                    if (state.filter === 'completed') {
+                        return todo.checked;
+                    } else if (state.filter === 'incomplete') {
+                        return !todo.checked;
+                    }
+                    return true;
+                });
+        },
     }
 }
